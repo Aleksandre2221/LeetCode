@@ -1,6 +1,6 @@
 
 
-         -- Approach 1. Using two - LEFT JOIN with multiple conditions -- 
+         -- Approach 1. Using two - LEFT JOIN with multiple conditions -
 SELECT a.student_name member_A, b.student_name member_B, c.student_name member_C
 FROM schoola a 
 LEFT JOIN schoolb b ON 
