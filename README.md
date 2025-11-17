@@ -6,12 +6,12 @@ This repository contains my **Python**, **Pandas**, and **SQL** solutions to Lee
 ```text
 LeetCode/
 │
-├── Python/
+├── Pandas/
 │   ├── Easy/
 │   ├── Medium/
 │   └── Hard/
 │
-├── Pandas/
+├── Python/
 │   ├── Easy/
 │   ├── Medium/
 │   └── Hard/
