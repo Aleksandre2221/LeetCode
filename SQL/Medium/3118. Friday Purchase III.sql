@@ -1,6 +1,6 @@
 
 
-         -- Approach 1. Using - 
+         -- Approach 1. Using multiple - CTE -- 
 WITH 
 	  weeks AS (
       SELECT DISTINCT LEFT(TO_CHAR(purchase_date, 'Week'), 1) week_of_month
