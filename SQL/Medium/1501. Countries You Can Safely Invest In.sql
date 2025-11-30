@@ -1,6 +1,6 @@
 
 
-         The Best Approach. Using two - JOIN and - GROUP BY with - HAVING condition -- 
+          -- The Best Approach. Using two - JOIN and - GROUP BY with - HAVING condition -- 
 SELECT co.name  
 FROM person p 
 JOIN country co ON LEFT(p.phone_number, 3) = co.country_code
