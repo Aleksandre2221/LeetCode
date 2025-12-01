@@ -1,6 +1,6 @@
 
 
-         -- Approach 1. Using - CTE / UNION ALL / LEFT JOIN -- 
+         -- Approachggg 1. Using - CTE / UNION ALL / LEFT JOIN -- 
 WITH 
 	points AS (
       SELECT host_team team_id,
