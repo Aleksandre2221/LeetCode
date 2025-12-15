@@ -1,3 +1,4 @@
+-- Risolved: 2 times 
 
 
          -- Approach 1. Using - UNION ALL --
