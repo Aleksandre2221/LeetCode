@@ -1,4 +1,6 @@
 
+-- Risolved: 2 times
+
 
          -- Approach 1. Using - CTE and Window Functions - SUM(), - AVG() with - ROWS BETWEEN condition -- 
 WITH day_sum AS (
@@ -14,8 +16,6 @@ SELECT visited_on,
       	, 2) average_amount 
 FROM day_sum 
 OFFSET 6;
-
-
 
 
          -- Approach 2. Without using Window Funciotns -- 
