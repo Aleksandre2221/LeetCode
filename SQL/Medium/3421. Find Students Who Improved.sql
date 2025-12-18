@@ -1,4 +1,6 @@
 
+-- Risolved: 2 times
+
 
          -- Approach 1. Using - FILTER (Only Postgres) -- 
 WITH first_last AS (
