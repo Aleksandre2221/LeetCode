@@ -2,7 +2,23 @@
 -- Risolved: 2 times
 
 
-         -- Approach 1. Using - FILTER (Only Postgres) -- 
+         -- Approach 1. Using - CTE with - FIRST_VALUE() and - LAST_VALUE() -- 
+-- Write your PostgreSQL query statement below
+WITH grps AS(
+    SELECT DISTINCT student_id, subject, 
+    FIRST_VALUE(score) OVER(PARTITION BY student_id, subject ORDER BY exam_date) first_score,
+    LAST_VALUE(score) OVER(PARTITION BY student_id, subject ORDER BY exam_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) latest_score,
+    COUNT(student_id) OVER(PARTITION BY student_id, subject) exam_cnt
+    FROM Scores
+)
+SELECT student_id, subject, first_score, latest_score
+FROM grps
+WHERE latest_score > first_value AND  exam_cnt > 1
+ORDER BY student_id, subject;
+
+         
+
+         -- Approach 2. Using - FILTER (Only Postgres) -- 
 WITH first_last AS (
   SELECT student_id, subject,
     MIN(exam_date) first_date,
@@ -21,7 +37,7 @@ HAVING MAX(s.score) FILTER (WHERE s.exam_date = fl.last_date)
 
 
 
-         -- Approach 2. Withou - FILTER using multiple - CTE -- 
+         -- Approach 3. Withou - FILTER using multiple - CTE -- 
 WITH 
   firs_last_date AS (
     SELECT student_id, subject, 
