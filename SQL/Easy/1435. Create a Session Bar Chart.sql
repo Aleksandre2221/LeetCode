@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times 
+
+
          -- Approach 1. Using two - CTE and - LEFT JOIN -- 
 WITH 
 	all_bins AS (
