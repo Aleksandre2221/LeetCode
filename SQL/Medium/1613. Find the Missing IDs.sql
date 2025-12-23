@@ -1,5 +1,8 @@
 
 
+-- Risolved: 3 times
+
+
          -- Approach 1. Using - RECURSIVE CTE -- 
 WITH RECURSIVE all_ids AS (
   SELECT 1 ids, MAX(customer_id) max_id
