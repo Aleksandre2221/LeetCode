@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times 
+
+
          -- Approach 1. Using - CTE with - UNION ALL -- (MySQL / PostgreSQL)
 WITH unpivot AS (
   SELECT year, wimbledon player_id FROM championships
