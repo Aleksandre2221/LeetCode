@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times 
+
+
          -- Approach 1. Using multiple - CTE -- 
 WITH 
     unpivot AS (
@@ -10,9 +13,9 @@ WITH
       SELECT contest_id, bronze_medal FROM contests
 	),
     consecutive_contests AS (
-		  SELECT user_id, 
-      		contest_id - ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY contest_id) group_id
-      FROM unpivot
+		SELECT user_id, 
+			contest_id - ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY contest_id) group_id
+		FROM unpivot
 	),
    consecutive_cnt AS (
      SELECT DISTINCT user_id 
