@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
          -- Approach 1. Using - CTE with - UNION ALL - 
 WITH all_friends AS (
   SELECT * FROM friendship 
