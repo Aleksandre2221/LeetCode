@@ -1,5 +1,9 @@
 
 
+-- Risolved: 2 times
+
+
+
          -- Approach 1. Using two - CTE with Window Function - ROW_NUMBER() -- 
 WITH 
 	f_col AS (
