@@ -1,5 +1,8 @@
 
 
+-- Rosolved: 2 times
+
+
          -- Approach 1. Using - CTE with a Window Function - ROW_NUMBER() and - CASE...WHEN conditions -- 
 WITH row_num AS (
   SELECT *,
