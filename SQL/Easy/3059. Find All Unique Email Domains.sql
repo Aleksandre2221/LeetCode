@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
          -- Approach 1. Using - SPLIT_PART (Only in PostgreSQL) -- 
 SELECT SPLIT_PART(email, '@', 2) email_domain, COUNT(*) "count"
 FROM emails
