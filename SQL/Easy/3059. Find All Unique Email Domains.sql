@@ -4,7 +4,7 @@
 
 
          -- Approach 1. Using - SPLIT_PART (Only in PostgreSQL) -- 
-SELECT SPLIT_PART(email, '@', 2) email_domain, COUNT(*) "count"
+SELECT SPLIT_PART(email, '@', 2) email_domain, COUNT(*) 
 FROM emails
 WHERE RIGHT(email, 4) = '.com'
 GROUP BY SPLIT_PART(email, '@', 2);
