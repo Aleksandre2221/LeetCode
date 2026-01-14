@@ -11,7 +11,8 @@ WITH exploded AS (
 SELECT tweet_id 
 FROM exploded 
 GROUP BY tweet_id
-HAVING COUNT(CASE WHEN LEFT(str, 1) = '@' THEN 1 END) > 3
+HAVING 
+	COUNT(CASE WHEN LEFT(str, 1) = '@' THEN 1 END) > 3
 	OR COUNT(CASE WHEN LEFT(str, 1) = '#' THEN 1 END) > 3
     OR LENGTH(MAX(content)) > 140
 ORDER BY tweet_id;
@@ -21,7 +22,8 @@ ORDER BY tweet_id;
          -- Approach 2. Using only - LENGTH and - REPLACE -- 
 SELECT tweet_id
 FROM tweets
-WHERE LENGTH(content) > 140
+WHERE 
+	LENGTH(content) > 140
     OR (LENGTH(content) - LENGTH(REPLACE(content, '@', ''))) > 3
     OR (LENGTH(content) - LENGTH(REPLACE(content, '#', ''))) > 3
 ORDER BY tweet_id;
