@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
            -- Approach 1. Using two - CTE -- 
 WITH 
   cons_groups AS (
@@ -19,4 +22,5 @@ WITH
 )
 SELECT first_seat_id, last_seat_id, consecutive_seats_len
 FROM groups_cnt
-WHERE rnk = 1;
+WHERE rnk = 1
+ORDER BY first_seat_id;
