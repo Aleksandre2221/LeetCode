@@ -16,7 +16,7 @@ WITH
       MIN(seat_id) first_seat_id,
       MAX(seat_id) last_seat_id,
       COUNT(*) consecutive_seats_len, 
-      RANK() OVER(ORDER BY COUNT(*) DESC) rnk 
+      DENSE_RANK() OVER(ORDER BY COUNT(*) DESC) rnk 
     FROM cons_groups
     GROUP BY grp_id
 )
