@@ -45,7 +45,27 @@ ORDER BY improvement_score DESC, name;
 
 
 
-
+		 -- Approach 3. Using one - CTE -- 
+WITH is_increasing AS (
+	SELECT pr.employee_id, pr.rating,
+		CASE  
+			WHEN rating - LEAD(rating) OVER(PARTITION BY employee_id ORDER BY review_date DESC) > 0 
+      		THEN 1 
+      		ELSE 0 
+      	END is_increasing,
+      	ROW_NUMBER() OVER(PARTITION BY pr.employee_id ORDER BY pr.review_date DESC) rn
+	FROM performance_reviews pr
+)
+SELECT e.employee_id, e.name, 
+	MAX(incr.rating) - MIN(incr.rating) improvement_score
+FROM is_increasing incr 
+JOIN employees e USING (employee_id)
+WHERE incr.rn <= 3 
+GROUP BY e.employee_id, e.name
+HAVING COUNT(*) > 2 
+	AND SUM(incr.is_increasing) >= 2 
+	AND MAX(incr.rating) - MIN(incr.rating) > 1
+ORDER BY improvement_score DESC, name;
 
 
 
