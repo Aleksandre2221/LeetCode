@@ -1,6 +1,37 @@
 
 
-         -- Approach 1. Using - CTE -- 
+-- Risolved: 2 times 
+
+
+         -- Approach 1. Using multiple - CTE 
+WITH 
+    valid_stores AS (
+      SELECT store_id 
+      FROM inventory 
+      GROUP BY store_id
+      HAVING COUNT(DISTINCT product_name) >= 3
+    ),
+    max_min_rn AS (
+      SELECT *, 
+          ROW_NUMBER() OVER(PARTITION BY store_id ORDER BY price DESC) max_rn, 
+          ROW_NUMBER() OVER(PARTITION BY store_id ORDER BY price) min_rn
+      FROM inventory 
+      WHERE store_id in (SELECT * FROM valid_stores) 
+)
+SELECT s.store_id, s.store_name, s.location, 
+    max_rn.product_name most_exp_product, 
+    min_rn.product_name cheapest_product, 
+    ROUND(min_rn.quantity * 1.0 / max_rn.quantity, 2) imbalance_ratio  
+FROM max_min_rn max_rn 
+JOIN max_min_rn min_rn ON max_rn.store_id = min_rn.store_id 
+JOIN stores s ON s.store_id = max_rn.store_id
+WHERE max_rn.max_rn = 1 
+  AND min_rn.min_rn = 1
+  AND max_rn.quantity < min_rn.quantity
+ORDER BY imbalance_ratio DESC, store_name;
+
+
+         -- Approach 2. Using - CTE -- 
 WITH valid_stores AS (
   SELECT store_id, 
       MAX(price) max_price, 
