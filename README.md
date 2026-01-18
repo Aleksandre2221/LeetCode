@@ -1,4 +1,4 @@
-# 🎯 LeetCode Problem Solutions
+.# 🎯 LeetCode Problem Solutions
 
 This repository contains my **Python**, **Pandas**, and **SQL** solutions to LeetCode problems, with **different approaches** for most problems. It's organized by language and difficulty to make it easy to navigate and study.
 
