@@ -1,33 +1,28 @@
 
 
-         -- Approach 1. Using - CTE -- 
-WITH sub_period AS (
-  SELECT user_id, 
-      MAX(event_date) - MIN(event_date) days_as_subscriber,
-      MAX(monthly_amount) max_historical_amount, 
-      MAX(event_date) event_date
-  FROM subscription_events
-  WHERE 
-    user_id IN (
-      SELECT DISTINCT user_id  
-      FROM subscription_events
-      WHERE event_type = 'downgrade'
-    )
-    AND	user_id NOT IN (
-      SELECT DISTINCT user_id  
-      FROM subscription_events
-      WHERE event_type = 'cancel'
-    )
-  GROUP BY user_id
-  HAVING MAX(event_date) - MIN(event_date) >= 60
+-- Risolved: 2 times
+
+
+         -- Approach 1. Using - CTE with multiple Window Functions -- 
+WITH max_min_date AS (
+    SELECT *, 
+        MAX(event_date) OVER(PARTITION BY user_id) max_date, 
+        MAX(monthly_amount) OVER(PARTITION BY user_id) max_amount,
+        MAX(event_date) OVER(PARTITION BY user_id) - MIN(event_date) OVER(PARTITION BY user_id) sub_days 
+    FROM subscription_events 
+    WHERE user_id IN (
+         SELECT DISTINCT user_id 
+         FROM subscription_events 
+         WHERE event_type = 'downgrade')
 )
-SELECT 
-  se.user_id,
-  se.plan_name current_plan, 
-  se.monthly_amount current_monthly_amount,
-  sp.max_historical_amount, 
-  sp.days_as_subscriber 
-FROM sub_period sp 
-JOIN subscription_events se ON sp.user_id = se.user_id
-WHERE se.monthly_amount / sp.max_historical_amount < 0.5
-ORDER BY days_as_subscriber DESC, user_id;
+SELECT user_id, 	
+    plan_name current_plan,
+    monthly_amount current_monthly_amount, 
+    max_amount max_historical_amount, 
+    sub_days days_as_subscriber
+FROM max_min_date 
+WHERE event_date = max_date
+    AND sub_days >= 60 
+    AND monthly_amount / max_amount < 0.5
+    AND monthly_amount > 0
+ORDER BY days_as_subscriber, user_id;
