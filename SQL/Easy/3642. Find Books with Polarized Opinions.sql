@@ -1,5 +1,7 @@
 
 
+-- Risolved: 2 times 
+
          -- Approach 1. Using multiple - HAVING conditions -- 
 SELECT b.book_id, b.title, b.author, b.genre, b.pages, 
     MAX(rs.session_rating) - MIN(rs.session_rating) rating_spread,
