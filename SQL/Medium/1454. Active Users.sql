@@ -2,20 +2,20 @@
 
 
          -- Approach 1. Using two - CTE -- 
-WITh 
+WITH 
 	dist AS (
-      SELECT DISTINCT l.id, l.login_date, a.name 
-      FROM accounts a  
-      LEFT JOIN logins l USING (id)
-	),
-    ranking AS (
+      SELECT DISTINCT a.id, a.name, l.login_date
+      FROM logins l
+      JOIN accounts a USING (id)
+    ),
+	grp AS (
       SELECT *, 
-      	ROW_NUMBER() OVER(PARTITION BY name ORDER BY login_date)::int rn 
+        login_date - ROW_NUMBER() OVER (PARTITION BY id ORDER BY login_date)::int AS grp
       FROM dist
 )
-SELECT DISTINCT id, name 
-FROM ranking  
-GROUP BY id, name, login_date - rn
+SELECT id, name
+FROM grp
+GROUP BY id, name, grp
 HAVING COUNT(*) >= 5;
 
 
