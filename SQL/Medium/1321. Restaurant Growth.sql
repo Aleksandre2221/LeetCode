@@ -1,5 +1,5 @@
 
--- Risolved: 2 times
+-- Risolved: 3 times
 
 
          -- Approach 1. Using - CTE and Window Functions - SUM(), - AVG() with - ROWS BETWEEN condition -- 
@@ -33,7 +33,20 @@ JOIN valid_dates vd ON c.visited_on BETWEEN vd.visited_on - INTERVAL '6 days' AN
 GROUP BY vd.visited_on;
 
 
-
-
-
+		 -- Approach 3. Without using - OFFSET -- 
+WITH 
+	grps AS (
+		SELECT DISTINCT visited_on, SUM(amount) amount 
+		FROM customer 
+		GROUP BY visited_on
+	),
+	calc AS (
+		SELECT visited_on,
+			SUM(amount) OVER(ORDER BY visited_on ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) amount, 
+			ROUND(AVG(amount) OVER(ORDER BY visited_on ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) average_amount
+		FROM grps 
+)
+SELECT *
+FROM calc
+WHERE visited_on - INTERVAL '6 days' >= (SELECT MIN(visited_on) FROM customer); 
 
