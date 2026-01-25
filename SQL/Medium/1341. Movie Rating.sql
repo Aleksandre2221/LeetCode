@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
          -- The Best Appraoch. Using two - CTE and - UNION ALL -- 
 WITH 
 	user_name AS (
