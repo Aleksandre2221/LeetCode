@@ -1,6 +1,6 @@
 
 
--- Risolved: 3 times
+-- Risolved: 4 times
 
 
          -- Approach 1. Using - MAX with - CASE...WHEN condition -- 
