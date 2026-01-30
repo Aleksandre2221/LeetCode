@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times 
+
+
          -- Approach 1. Using two - CTE -- 
 WITH 
   row_num AS (
