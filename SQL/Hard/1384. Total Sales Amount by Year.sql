@@ -3,7 +3,7 @@
 
          -- Approach 1. Using - RECURSIVE CTE -- 
 WITH RECURSIVE entire_period AS (
-  SELECT min(period_start) min_period_date, MAX(period_end) max_period_date FROM sales  
+  SELECT MIN(period_start) min_period_date, MAX(period_end) max_period_date FROM sales  
   UNION ALL  
   SELECT (min_period_date + INTERVAL '1 day')::date, max_period_date FROM entire_period
   WHERE min_period_date + INTERVAL '1 day' <= max_period_date
