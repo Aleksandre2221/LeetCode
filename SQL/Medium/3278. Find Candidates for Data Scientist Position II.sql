@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times
+-- Risolved: 3 times
 
 
          -- Approach 1. Using three - CTE -- 
