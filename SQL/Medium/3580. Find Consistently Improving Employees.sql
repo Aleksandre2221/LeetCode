@@ -69,6 +69,19 @@ ORDER BY improvement_score DESC, name;
 
 
 
+		 -- Approach 4. Using one - CTE with - ROW_NUMBER() -- 
+WITH rating_diff AS (
+    SELECT employee_id, rating,
+        ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY review_date DESC) AS rn
+    FROM performance_reviews 
+)
+SELECT e.employee_id, e.name,
+    MAX(CASE WHEN rd.rn = 1 THEN rd.rating END) - MAX(CASE WHEN rd.rn = 3 THEN rd.rating END) AS improvement_score
+FROM rating_diff rd
+JOIN employees e USING (employee_id)
+GROUP BY e.employee_id, e.name
+HAVING MAX(CASE WHEN rd.rn = 1 THEN rd.rating END) - MAX(CASE WHEN rd.rn = 3 THEN rd.rating END) >= 2
+ORDER BY improvement_score DESC, name;
 
 
 
