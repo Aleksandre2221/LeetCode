@@ -1,5 +1,8 @@
 
 
+-- Risvoled: 2 times
+
+
          -- Approach 1. Using multiple - CASE....WHEN conditions within - SUM -- 
 SELECT id,
     SUM(CASE WHEN month = 'Jan' THEN revenue END) AS Jan_Revenue,
