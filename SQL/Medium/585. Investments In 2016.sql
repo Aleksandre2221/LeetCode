@@ -1,5 +1,6 @@
--- Risolved: 4 times
 
+
+-- Risolved: 3 times
 
 
          -- Approach 1. Using - CTE with Window Functions -- 
