@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times 
+-- Risolved: 3 times 
 
 
          -- Approach 1. Using two - CTE and - LEFT JOIN -- 
@@ -11,14 +11,14 @@ WITH
 	bins AS (
       SELECT *, 
         CASE	
-            WHEN duration::numeric / 60 < 5 THEN '[0-5>'
-            WHEN duration::numeric / 60 >= 5 AND duration::numeric / 60 < 10 THEN '[5-10>'
-            WHEN duration::numeric / 60 >= 10 AND duration::numeric / 60 < 15 THEN '[10-15>'
-            ELSE '15 or more'
+            WHEN duration / 60.0 >= 15 THEN '15 or more'
+            WHEN duration / 60.0 >= 10 THEN '[10-15>'
+            WHEN duration / 60.0 >= 5  THEN '[5-10>'
+            ELSE '[0-5>'
         END bin 
     FROM sessions
 )
-SELECT ab.bin,  COUNT(b.bin)total total 
+SELECT ab.bin,  COUNT(b.bin) total  
 FROM all_bins ab 
 LEFT JOIN bins b ON ab.bin = b.bin
 GROUP BY ab.bin;
@@ -36,7 +36,32 @@ SELECT '15 or more' AS bin, COUNT(*) total FROM Sessions WHERE 900 <= duration;
 
 
 
-
+		 -- Approach 3. Using multiple CTE -- 
+WITH 
+	all_bins AS (
+      SELECT '[0-5>' bin 
+      UNION ALL
+      SELECT '[5-10>' 
+      UNION ALL
+      SELECT '[10-15>' 
+      UNION ALL
+      SELECT '15 or more'
+  	),
+  	ex_bins AS (
+      SELECT session_id,
+          CASE
+              WHEN duration / 60.0 >= 15 THEN '15 or more'
+              WHEN duration / 60.0 >= 10 THEN '[10-15>'
+              WHEN duration / 60.0 >= 5 THEN '[5-10>'
+              ELSE '[0-5>'
+          END AS bin
+      FROM sessions
+)
+SELECT ab.bin, 
+	COUNT(eb.session_id) total
+FROM all_bins ab
+LEFT JOIN ex_bins eb USING (bin)
+GROUP BY ab.bin;
 
 
 
