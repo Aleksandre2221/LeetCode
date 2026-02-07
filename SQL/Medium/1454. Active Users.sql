@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times
+-- Risolved: 3 times
 
 
          -- Approach 1. Using two - CTE -- 
@@ -18,7 +18,8 @@ WITH
 SELECT id, name
 FROM grp
 GROUP BY id, name, grp
-HAVING COUNT(*) >= 5;
+HAVING COUNT(*) >= 5
+ORDER BY id;
 
 
 
