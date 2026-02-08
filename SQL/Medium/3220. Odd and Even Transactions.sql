@@ -1,5 +1,8 @@
 
 
+-- Risolved: 3 times
+
+
          -- Approach 1. Using - SUM with - CASE..WHEN conditions --
 SELECT transaction_date, 
   COALESCE(SUM(CASE WHEN amount % 2 <> 0 THEN amount END), 0) odd_sum, 
