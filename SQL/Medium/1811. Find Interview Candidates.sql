@@ -1,12 +1,12 @@
 
 
--- Risolved: 3 times 
+-- Risolved: 4 times 
 
 
          -- Approach 1. Using advanced technique - "Gaps and Islands" -- 
 WITH 
     unpivot AS (
-      SELECT contest_id, gold_medal user_id FROM contests
+      SELECT contest_id, gold_medal AS user_id FROM contests
       UNION ALL 
       SELECT contest_id, silver_medal FROM contests 
       UNION ALL 
@@ -18,8 +18,8 @@ WITH
 		FROM unpivot
 	),
    consecutive_cnt AS (
-     SELECT DISTINCT user_id 
-	   FROM consecutive_contests
+     SELECT user_id 
+	 FROM consecutive_contests
      GROUP BY user_id, group_id
      HAVING COUNT(*) >= 3
 	),
@@ -55,10 +55,16 @@ WITH
       		THEN user_id  
       	END user_id
       FROM all_medals
-)
+	),
+    gold_medals AS (
+      SELECT gold_medal user_id
+      FROM contests
+      GROUP BY gold_medal
+      HAVING COUNT(*) >= 3
+)	
 SELECT name, mail  
 FROM users 
-WHERE user_id IN (SELECT gold_medal FROM contests GROUP BY gold_medal HAVING COUNT(*) > 2) 
+WHERE user_id IN (SELECT user_id FROM gold_medals) 
 	OR user_id IN (SELECT user_id FROM grps);
                   
 
