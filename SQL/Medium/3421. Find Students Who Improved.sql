@@ -1,5 +1,6 @@
 
--- Risolved: 2 times
+
+-- Risolved: 3 times
 
 
          -- Approach 1. Using - CTE with - FIRST_VALUE() and - LAST_VALUE() -- 
@@ -37,28 +38,19 @@ HAVING MAX(s.score) FILTER (WHERE s.exam_date = fl.last_date)
 
 
 
-         -- Approach 3. Withou - FILTER using multiple - CTE -- 
-WITH 
-  firs_last_date AS (
-    SELECT student_id, subject, 
-      Min(exam_date) first_date, 
-      MAX(exam_date) last_date
-    FROM scores 
-    GROUP BY student_id, subject
-  ),
-  first_last_score AS (
-    SELECT s.student_id, s.subject, 
-      CASE WHEN s.exam_date = fld.first_date THEN score END first_score,
-      CASE WHEN s.exam_date = fld.last_date THEN score END latest_score
-    FROM scores s 
-    JOIN firs_last_date fld ON s.student_id = fld.student_id AND s.subject = fld.subject
-    WHERE s.exam_date = fld.first_date OR s.exam_date = fld.last_date 
+         -- Approach 3. Using - CTE with Window Functions --
+WITH first_last_date AS (
+  SELECT *,
+    MIN(exam_date) OVER(PARTITION BY student_id, subject) fd,
+    MAX(exam_date) OVER(PARTITION BY student_id, subject) ld
+  FROM scores
 )
 SELECT student_id, subject, 
-  MAX(first_score) first_score, 
-  MAX(latest_score) latest_score
-FROM first_last_score
+    MAX(CASE WHEN exam_date = fd THEN score END) first_score,
+    MIN(CASE WHEN exam_date = ld THEN score END) latest_score
+FROM first_last_date 
 GROUP BY student_id, subject
-HAVING MAX(latest_score) > MAX(first_score)
+HAVING MAX(CASE WHEN exam_date = ld THEN score END) - MAX(CASE WHEN exam_date = fd THEN score END) > 0
+
 
 
