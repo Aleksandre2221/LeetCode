@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times
+-- Risolved: 3 times
 
 
          -- The Best Approach. Using - CASE...WHEN condition within Window Function - SUM --  
