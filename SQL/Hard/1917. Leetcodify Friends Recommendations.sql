@@ -3,7 +3,7 @@
 
          -- Approach 1. Using - CTE -- 
 WITH valid_users AS (
-	SELECT l1.user_id, l2.user_id AS reccomended_id, l1.day
+  SELECT l1.user_id, l2.user_id AS reccomended_id, l1.day
   FROM listens l1  
   JOIN listens l2 ON l1.user_id < l2.user_id AND l1.song_id = l2.song_id AND l1.day = l2.day
   WHERE (l1.user_id, l2.user_id) NOT IN (SELECT user1_id, user2_id FROM friendship)
