@@ -13,7 +13,7 @@ WITH row_num AS (
             ELSE 3
        END rn2
     FROM genders
-    ORDER BY rn1, rn2
 )
 SELECT user_id, gender 
-FROM row_num;
+FROM row_num
+ORDER BY rn1, rn2;
