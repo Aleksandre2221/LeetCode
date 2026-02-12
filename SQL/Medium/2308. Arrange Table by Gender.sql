@@ -1,6 +1,6 @@
 
 
--- Rosolved: 3 times
+-- Rosolved: 4 times
 
 
          -- Approach 1. Using - CTE with a Window Function - ROW_NUMBER() and - CASE...WHEN conditions -- 
