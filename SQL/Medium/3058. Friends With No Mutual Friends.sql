@@ -1,6 +1,6 @@
 
 
--- Risolved: 3 times 
+-- Risolved: 4 times 
 
 
          -- Approach 1. Using - CTE and - WHERE NOT IN condition -- 
