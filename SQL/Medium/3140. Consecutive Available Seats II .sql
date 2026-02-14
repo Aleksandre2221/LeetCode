@@ -1,6 +1,6 @@
 
 
--- Risolved: 3 times
+-- Risolved: 4 times
 
 
            -- Approach 1. Using two - CTE -- 
@@ -24,3 +24,30 @@ SELECT first_seat_id, last_seat_id, consecutive_seats_len
 FROM groups_cnt
 WHERE rnk = 1
 ORDER BY first_seat_id;
+
+
+
+           -- Approach 2. Using one CTE -- 
+WITH row_num AS (
+  SELECT *, 
+      seat_id - ROW_NUMBER() OVER(ORDER BY seat_id) rn 
+  FROM seats 
+  WHERE is_free = 1
+)
+SELECT 
+    MIN(seat_id) first_seat_id, 
+    MAX(seat_id) last_seat_id, 
+    COUNT(rn) consecutvie_seats_length
+FROM row_num 
+GROUP BY rn
+HAVING COUNT(rn) = (
+  SELECT COUNT(rn) cnt
+  FROM row_num 
+  GROUP BY rn 
+  ORDER BY cnt DESC 
+  LIMIT 1
+);
+
+
+
+
