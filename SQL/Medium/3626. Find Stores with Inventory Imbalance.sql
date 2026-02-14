@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times 
+-- Risolved: 3 times 
 
 
          -- Approach 1. Using multiple - CTE 
@@ -50,3 +50,4 @@ JOIN inventory i_cheap ON i_cheap.store_id = vs.store_id AND i_cheap.price = vs.
 JOIN stores s ON s.store_id = vs.store_id
 WHERE i_exp.quantity < i_cheap.quantity
 ORDER BY imbalance_ratio DESC, store_name; 
+
