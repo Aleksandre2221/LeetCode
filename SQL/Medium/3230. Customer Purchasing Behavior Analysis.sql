@@ -1,6 +1,6 @@
 
 
--- Risolved: 2 times
+-- Risolved: 3 times
 
 
          -- Approach 1. Using two - CTE -- 
@@ -16,7 +16,7 @@ WITH
   category_ranking AS (
     SELECT customer_id, category, 
       RANK() OVER(PARTITION BY customer_id ORDER BY cnt DESC, max_date DESC) rnk
-    FROM category_info t  
+    FROM category_info   
 ) 
 SELECT 
   t.customer_id, 
