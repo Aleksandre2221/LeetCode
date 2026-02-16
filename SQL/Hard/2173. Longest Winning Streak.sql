@@ -3,9 +3,9 @@
 
            -- Approach 1. Using multiple - CTE -- 
 WITH 
-	seq AS (
+  seq AS (
     SELECT *, 
-		  ROW_NUMBER() OVER(PARTITION BY player_id ORDER BY match_day) match_seq, 
+	  ROW_NUMBER() OVER(PARTITION BY player_id ORDER BY match_day) match_seq, 
       ROW_NUMBER() OVER(PARTITION BY player_id, result ORDER BY match_day) result_seq
     FROM matches
   ),
@@ -13,7 +13,7 @@ WITH
     SELECT *, match_seq - result_seq diff
     FROM seq
     WHERE result = 'Win'
-	), 
+  ), 
   grps AS (
     SELECT player_id, COUNT(player_id) cons_cnt
     FROM diff 
