@@ -41,3 +41,22 @@ SELECT customer_id
 FROM is_increased 
 GROUP BY customer_id
 HAVING COUNT(customer_id) = SUM(is_incr);
+
+
+
+			-- Approach 2. Using - "Gaps and Islands" tecnique -- 
+WITH ranking AS (
+  SELECT customer_id, 
+  	EXTRACT(year FROM order_date), 
+  	SUM(price) total,
+  	EXTRACT(year FROM order_date) - RANK() OVER(partition by customer_id ORDER BY sum(price)) rnk 
+  FROM orders
+  GROUP BY  customer_id, EXTRACT(year FROM order_date)
+)
+SELECT customer_id 
+FROM ranking
+GROUP BY customer_id 
+HAVING COUNT(DISTINCT rnk) = 1;
+
+
+
