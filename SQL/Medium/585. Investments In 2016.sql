@@ -55,14 +55,14 @@ WITH
       SELECT tiv_2015 
       FROM insurance 
       GROUP BY tiv_2015 
-      HAVING COUNT(*) > 1), 
-      
+      HAVING COUNT(*) > 1
+	),   
     t2 AS (
       SELECT lat, lon 
       FROM insurance
       GROUP BY lat, lon 
-      HAVING COUNT(*) = 1)
-      
+      HAVING COUNT(*) = 1
+)      
 SELECT ROUND(SUM(tiv_2016)::numeric, 2) tiv_2016
 FROM insurance i 
 JOIN t1 ON t1.tiv_2015 = i.tiv_2015
