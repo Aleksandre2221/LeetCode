@@ -1,6 +1,6 @@
 
 
-Risolved: 2 times
+-- Risolved: 2 times
 
 
          -- Approach 1. Using - Subquery with Window Funcion - DENSE_RANK() -- 
