@@ -24,7 +24,7 @@ WITH
 )
 SELECT 
 	content_id, 
-  content_text original_text, 
-  STRING_AGG(upper_word, ' ') converted_text
+  	content_text original_text, 
+  	STRING_AGG(upper_word, ' ') converted_text
 FROM uppercase_words
 GROUP BY content_id, content_text
