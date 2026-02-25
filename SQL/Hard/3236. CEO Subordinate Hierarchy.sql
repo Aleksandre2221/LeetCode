@@ -20,7 +20,7 @@ WITH RECURSIVE
       WHERE manager_id IS NULL 
 )
 SELECT 
-	  hl.employee_id subordinate_id, 
+	hl.employee_id subordinate_id, 
     hl.employee_name subordinate_name, 
     hl.lvl hierarchy_level, 
     hl.salary - cs.salary salary_difference
