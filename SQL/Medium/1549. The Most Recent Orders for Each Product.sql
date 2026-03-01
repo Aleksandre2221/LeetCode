@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
          -- Approach 1. Using - CTE -- 
 WITH valid_dates AS (
   SELECT p.product_name, MAX(order_date) order_date
