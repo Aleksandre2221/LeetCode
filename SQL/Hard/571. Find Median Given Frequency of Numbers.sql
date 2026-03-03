@@ -1,33 +1,24 @@
 
 
-         -- Approach 1. Using multiple - RECURSIVE CTE -- 
+         -- Approach 1. Using - RECURSIVE CTE -- 
 WITH 
-	RECURSIVE rec AS (
-      SELECT 1 AS num
-      UNION ALL  
-      SELECT num + 1 
-      FROM rec
-      WHERE num < (SELECT MAX(frequency) FROM number_frequency) 
+	RECURSIVE freq AS (
+      SELECT num, 1 AS times, frequency 
+      FROM numbers 
+      UNION ALL 
+      SELECT num, times+1, frequency
+      FROM freq 
+      WHERE times <= frequency-1
     ),
-    row_num AS (
-      SELECT n.number, 
-      	ROW_NUMBER() OVER(ORDER BY n.number) rn,
-      	COUNT(*) OVER() total_num
-      FROM number_frequency n 
-      LEFT JOIN rec ON n.frequency >= rec.num
-	),
-  considered_rows AS (
-      SELECT *, 
-          CASE  
-            WHEN total_num % 2 = 0 
-        			THEN rn IN (total_num/2, (total_num/2 + 1)) 
-            ELSE rn = (total_num + 1) / 2
-          END considered
-      FROM row_num
+    total_nums AS (
+      SELECT num,
+      	ROW_NUMBER() OVER(ORDER BY num) rn,
+      	COUNT(*) OVER() total_nums 
+      FROM freq  
 )
-SELECT ROUND(AVG(number), 1) median 
-FROM considered_rows
-WHERE considered = TRUE;
+SELECT avg(num) median 
+FROM total_nums
+WHERE rn BETWEEN total_nums / 2.0 AND (total_nums / 2.0) + 1
 
 
 
