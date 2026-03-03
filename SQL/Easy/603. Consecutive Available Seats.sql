@@ -21,6 +21,6 @@ SELECT seat_id
 FROM (
   SELECT *,
 		LEAD(FREE) OVER(ORDER BY seat_id) next_free, 
-  	LAG(FREE) OVER(ORDER BY seat_id) prev_free
+  		LAG(FREE) OVER(ORDER BY seat_id) prev_free
   FROM cinema) sub
 WHERE free = 1 AND (next_free = 1 OR prev_free = 1);
