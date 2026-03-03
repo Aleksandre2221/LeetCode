@@ -1,5 +1,7 @@
 
 
+
+
          -- Approach 1. Using - GROUP BY and - FILTER -- 
 SELECT question_id, 
     COUNT(*) FILTER(WHERE answer_id IS NOT NULL)::numeric
