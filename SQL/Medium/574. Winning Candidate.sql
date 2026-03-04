@@ -3,7 +3,7 @@
         -- Appraoch 1. Using - COUNT(*) - in ORDER BY clause -- 
 SELECT can.name
 FROM candidate can
-JOIN vote v ON can.id = v.candidatid
+JOIN vote v ON can.id = v.candidateid
 GROUP BY can.name
 ORDER BY COUNT(*) DESC
 LIMIT 1;
