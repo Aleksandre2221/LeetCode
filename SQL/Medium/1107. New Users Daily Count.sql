@@ -7,7 +7,8 @@ FROM (
   FROM traffic
   WHERE activity = 'login'
 ) sub
-WHERE rn = 1 AND activity_date >= ('2019-06-30'::DATE - INTERVAL '90 DAYS')
+WHERE rn = 1 
+    AND activity_date BETWEEN ('2019-06-30'::date - INTERVAL '90 DAYS') AND '2019-06-30'::date
 GROUP BY activity_date;
 
 
@@ -21,7 +22,8 @@ FROM (
     FROM traffic
     WHERE activity = 'login'
 ) sub
-WHERE activity_date = first_login AND activity_date >= ('2019-06-30'::DATE - INTERVAL '90 DAYS')
+WHERE activity_date = first_login 
+	AND activity_date BETWEEN ('2019-06-30'::date - INTERVAL '90 DAYS') AND '2019-06-30'::date
 GROUP BY activity_date;
 
 
@@ -35,7 +37,7 @@ FROM (
     WHERE activity = 'login'
     GROUP BY user_id
 ) sub
-WHERE first_login >= ('2019-06-30'::DATE - INTERVAL '90 DAYS')
+WHERE first_login BETWEEN ('2019-06-30'::date - INTERVAL '90 DAYS') AND '2019-06-30'::date
 GROUP BY first_login;
 
 
