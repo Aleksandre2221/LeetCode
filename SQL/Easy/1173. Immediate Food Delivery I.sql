@@ -8,9 +8,11 @@ FROM Delivery;
 
 
 
-         -- Approach 2. Using two - Subqueries -- 
-SELECT ROUND(
-  	(SELECT COUNT(*) immediate_cnt FROM delivery WHERE order_date = customer_pref_delivery_date)::numeric / 
-  		(SELECT COUNT(*) total_cnt FROM delivery)
-  , 2) immediate_percentage;
+         -- Approach 2. CASE WHEN conditions -- 
+SELECT 
+    ROUND(
+        SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0
+        / COUNT(*)
+    , 2) immediate_percentage 
+FROM delivery;
 
