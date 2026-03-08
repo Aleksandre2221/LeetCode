@@ -1,5 +1,7 @@
 
 
+-- Risovled: 2 times 
+
           -- Approach 1. Using - WHERE NOT IN condition --
 SELECT id, name  
 FROM students
