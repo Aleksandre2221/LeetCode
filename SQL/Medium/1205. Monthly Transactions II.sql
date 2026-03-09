@@ -33,9 +33,8 @@ SELECT
     COALESCE(cb.cnt, 0) chargeback_count, 
     COALESCE(cb.amount, 0) chargeback_amount
 FROM approved a 
-FULL JOIN charged_b cb ON a.month = cb.month AND a.country = cb.country;
-WHERE COALESCE(a.amount, 0) <> 0
-	OR COALESCE(cb.amount, 0) <> 0;
+FULL JOIN charged_b cb ON a.month = cb.month AND a.country = cb.country
+WHERE a.amount > 0 OR cb.amount > 0;
 
 
 
@@ -57,8 +56,8 @@ SELECT
 FROM all_events
 GROUP BY TO_CHAR(trans_date, 'YYYY-MM'), country
 HAVING 
-	SUM(CASE WHEN state = 'approved' THEN amount else 0 END) <> 0 
-    OR SUM(CASE WHEN state = 'chargeback' THEN amount else 0 END) <> 0;
+	SUM(CASE WHEN state = 'approved' THEN amount else 0 END) > 0 
+    OR SUM(CASE WHEN state = 'chargeback' THEN amount else 0 END) > 0;
 
 
 
