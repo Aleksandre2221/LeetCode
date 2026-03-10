@@ -23,25 +23,22 @@ ORDER BY sessions_count, user_id DESC;
 
 
 
-         -- Approach 2. Using two - CTE -- 
-WITH 
-	ordered_sessions AS (
-    SELECT *,
-		  ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY session_start) rn
-    FROM sessions
-  ),
-  first_as_viewer AS (
-      SELECT user_id
-      FROM ordered_sessions
-      WHERE rn = 1 AND session_type = 'Viewer'
+         -- Approach 2. Using - CTE and - NOT IN condition --  
+WITH row_num AS (
+  SELECT *, 
+  	ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY session_start) rn
+  FROM sessions 
 )
-SELECT s.user_id, COUNT(*) sessions_count
-FROM sessions s
-JOIN first_as_viewer fav USING (user_id)
-WHERE s.session_type = 'Streamer'
-GROUP BY s.user_id
-HAVING COUNT(*)  > 0
-ORDER BY sessions_count, user_id DESC;
+SELECT user_id, COUNT(*) sessions_count
+FROM sessions 
+WHERE user_id IN (
+  SELECT user_id 
+  FROM row_num 
+  WHERE rn = 1 AND session_type = 'Viewer'
+)
+AND session_type <> 'Viewer'
+GROUP BY user_id
+ORDER BY sessions_count DESC, user_id DESC
 
 
 
