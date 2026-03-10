@@ -9,14 +9,16 @@ SELECT
     COUNT(*) 
 FROM emails
 WHERE RIGHT(email, 4) = '.com'
-GROUP BY SPLIT_PART(email, '@', 2);
+GROUP BY SPLIT_PART(email, '@', 2)
+ORDER BY email_domain;
 
 
 
          -- Approach 2. Using - SUBTRING(... FROM POSITION (...)) -- SQL Standard
 SELECT 
-    SUBSTRING(email FROM POSITION('@' IN email) + 1), 
+    SUBSTRING(email FROM POSITION('@' IN email) + 1) email_domain, 
     COUNT(*)
 FROM emails
 WHERE RIGHT(email, 4) = '.com'
-GROUP BY SUBSTRING(email FROM POSITION('@' IN email) + 1);
+GROUP BY SUBSTRING(email FROM POSITION('@' IN email) + 1)
+ORDER BY email_domain;
