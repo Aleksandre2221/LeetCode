@@ -2,7 +2,7 @@
 
          -- Approach 1. Using - HAVING with multiple conditions and - STRING_AGG -- 
 SELECT state, 
-  STRING_AGG(city, ', ') cities,
+  STRING_AGG(city, ', ' ORDER BY city) cities,
   COUNT(CASE WHEN LEFT(city, 1) = LEFT(state, 1) THEN 1 END) matching_letter_count
 FROM cities
 GROUP BY state
