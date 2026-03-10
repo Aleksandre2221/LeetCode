@@ -18,8 +18,7 @@ WHERE session_type = 'Streamer'
       	AND os.session_type = 'Viewer'
 )
 GROUP BY user_id 
-HAVING COUNT(*) > 0 
-ORDER BY sessions_count, user_id DESC; 
+ORDER BY sessions_count DESC, user_id DESC; 
 
 
 
