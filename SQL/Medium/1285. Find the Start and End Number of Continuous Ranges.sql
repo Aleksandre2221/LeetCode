@@ -7,7 +7,7 @@
 WITH row_num AS (
   SELECT log_id, 
         log_id - ROW_NUMBER() OVER(ORDER BY log_id) rn
-  FROM log 
+  FROM logs 
 )
 SELECT 
     MIN(log_id) start_date, 
