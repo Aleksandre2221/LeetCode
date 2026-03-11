@@ -1,18 +1,18 @@
 
 
-         -- Approach 1. Using - CTE with Window Functions - RANK() and NTILE() -- 
-WITH team_info AS (
-  SELECT team_id, team_name, 
-      wins * 3 + draws points,
-      RANK() OVER(ORDER BY wins * 3 + draws DESC) position, 
-      NTILE(3) OVER (ORDER BY wins * 3 + draws DESC) AS grp
-  FROM teamstats 
+         -- Approach 1. Using - CTE -- 
+WITH team_pts AS (
+    SELECT 
+        team_name, 
+        (wins*3 + draws) points, 
+        RANK() OVER(ORDER BY (wins*3 + draws) DESC) position 
+    FROM teamstats 
 )
-SELECT *, 
+SELECT team_name, points, position,  
     CASE  
-      WHEN grp = 1 THEN 'Top' 
-      WHEN grp = 2 THEN 'Middle' 
-      ELSE 'Bottom' 
-    END tier
-FROM team_info 
-ORDER BY points DESC;
+        WHEN position < (0.33 * (SELECT MAX(position) FROM team_pts) + 1) THEN 'Tier 1'
+        WHEN position < (0.66 * (SELECT MAX(position) FROM team_pts) + 1) THEN 'Tier 2'
+        ELSE 'Tier 3'
+    END tier 
+FROM team_pts 
+ORDER BY points DESC, team_name;
