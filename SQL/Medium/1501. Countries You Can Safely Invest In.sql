@@ -1,9 +1,14 @@
 
 
-          -- The Best Approach. Using two - JOIN and - GROUP BY with - HAVING condition -- 
-SELECT co.name  
+          -- The Best Approach. Using - CTE with - UNION ALL -- 
+WITH bidir AS (
+    SELECT caller_id, callee_id, duration FROM calls 
+    UNION ALL 
+    SELECT callee_id, caller_id, duration FROM calls
+)
+SELECT c.name country
 FROM person p 
-JOIN country co ON LEFT(p.phone_number, 3) = co.country_code
-JOIN calls ca ON p.id IN (ca.caller_id, ca.callee_id)
-GROUP BY co.name
-HAVING AVG(ca.duration) > (SELECT AVG(duration) from calls);
+JOIN country c ON c.country_code = LEFT(p.phone_number, 3)
+JOIN bidir b ON b.caller_id = p.id
+GROUP BY c.name
+HAVING AVG(duration) > (SELECT AVG(duration) FROM bidir);
