@@ -5,16 +5,17 @@
 
          -- Approach 1. Using - RECURSIVE CTE -- 
 WITH RECURSIVE all_ids AS (
-  SELECT 1 ids, MAX(customer_id) max_id
-  FROM customers
-  UNION ALL  
-  SELECT ids + 1, max_id
-  FROM all_ids
-  WHERE ids < max_id
-) 
-SELECT ids
-FROM all_ids
-WHERE ids NOT IN (SELECT customer_id FROM customers)
+    SELECT 1 AS id, MAX(customer_id) max_id 
+    FROM customers 
+    UNION ALL 
+    SELECT id + 1, max_id
+    FROM all_ids
+    WHERE id + 1 <= max_id
+)
+SELECT ai.id ids 
+FROM all_ids ai
+LEFT JOIN customers c ON c.customer_id = ai.id
+WHERE c.customer_id IS NULL
 ORDER BY ids;
 
 
