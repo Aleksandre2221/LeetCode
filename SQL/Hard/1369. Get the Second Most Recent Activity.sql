@@ -7,7 +7,7 @@ WITH
     SELECT *,
       	ROW_NUMBER() OVER(PARTITION BY username ORDER BY enddate DESC) rn,
       	COUNT(*) OVER(PARTITION BY username) cnt 
-    FROM user_activity
+    FROM userActivity
   ),
   valid_dates AS (
     SELECT username, activity, startdate, 
@@ -28,7 +28,7 @@ WITH row_num AS (
 	SELECT *,
       	ROW_NUMBER() OVER(PARTITION BY username ORDER BY enddate DESC) rn,
       	COUNT(*) OVER(PARTITION BY username) cnt 
-	FROM user_activity
+	FROM userActivity
 )
 SELECT username, activity, startdate, enddate 
 FROM row_num
