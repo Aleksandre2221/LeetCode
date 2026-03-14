@@ -2,13 +2,12 @@
 
          -- Approach 1. Using - GROUP BY with - WHERE condition --  
 SELECT 
-  TO_CHAR(order_date, 'YYYY-MM') "month",
-  COUNT(order_id) order_count,
-  COUNT(DISTINCT customer_id) customer_count
-FROM orders
-WHERE invoice > 20
+    TO_CHAR(order_date, 'YYYY-MM') "month", 
+    COUNT(DISTINCT order_id) order_count, 
+    COUNT(DISTINCT customer_id) customer_count
+FROM orders 
+WHERE invoice > 20 
 GROUP BY TO_CHAR(order_date, 'YYYY-MM');
-
 
 
 
