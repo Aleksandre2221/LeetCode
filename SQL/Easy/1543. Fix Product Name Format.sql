@@ -1,41 +1,13 @@
 
 
-         -- Approach 1. Using - GROUP BY with - LOWER(TRIM(...)) and - TO_CHAR -- 
+         -- Approach 1. Using - GROUP BY with - LOWER(TRIM(...)) and - DATE_FORMAT -- (MySQL)
 SELECT 
-  LOWER(TRIM(product_name)) AS product_name,
-  TO_CHAR(sale_date, 'YYYY-MM') AS sale_date,
-  COUNT(*) AS total
+    TRIM(LOWER(product_name)) product_name,
+    DATE_FORMAT(sale_date, '%Y-%m') sale_date, 
+    COUNT(*) total 
 FROM sales
-GROUP BY LOWER(TRIM(product_name)), TO_CHAR(sale_date, 'YYYY-MM')
+GROUP BY TRIM(LOWER(product_name)), DATE_FORMAT(sale_date, '%Y-%m') 
 ORDER BY product_name, sale_date;
-
-
-
-         -- Approach 2. Using - Subquery -- 
-SELECT product_name, sale_date, COUNT(*) total 
-FROM (
-  SELECT 
-  	LOWER(TRIM(product_name)) product_name, 
-  	TO_CHAR(sale_date, 'YYYY-MM') sale_date 
-  FROM sales
-) sub 
-GROUP BY product_name, sale_date 
-ORDER BY product_name, sale_date; 
-
-
-
-
-         -- Approach 3. Using - CTE -- 
-WITH formatting AS (
-  SELECT 
-  	LOWER(TRIM(product_name)) product_name, 
-  	TO_CHAR(sale_date, 'YYYY-MM') sale_date 
-  FROM sales
-)
-SELECT product_name, sale_date, COUNT(*) total 
-FROM formatting
-GROUP BY product_name, sale_date 
-ORDER BY product_name, sale_date; 
 
 
 
