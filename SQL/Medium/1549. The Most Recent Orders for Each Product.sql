@@ -4,26 +4,13 @@
 
 
          -- Approach 1. Using - CTE -- 
-WITH valid_dates AS (
-  SELECT p.product_name, MAX(order_date) order_date
+WITH ranking AS (
+  SELECT *, 
+  	RANK() OVER(PARTITION BY p.product_id ORDER BY o.order_date DESC) rnk
   FROM orders o 
-  JOIN products p ON p.product_id = o.product_id
-  GROUP BY p.product_name
+  JOIN products p USING (product_id)
 )
-SELECT vd.product_name, o.product_id, o.order_id, vd.order_date  
-FROM orders o 
-JOIN valid_dates vd ON vd.order_date = o.order_date
-ORDER BY product_name, product_id, order_date; 
-
-
-
-         -- Approach 2. Using - Subquery within - WHERE condition -- 
-SELECT p.product_name, o.product_id, o.order_id, o.order_date
-FROM orders o
-JOIN products p ON p.product_id = o.product_id
-WHERE o.order_date = (
-    SELECT MAX(o2.order_date)
-    FROM orders o2
-    WHERE o2.product_id = o.product_id
-)
-ORDER BY p.product_name, o.product_id, o.order_date;
+SELECT product_name, product_id, order_id, order_date 
+FROM ranking 
+WHERE rnk = 1
+ORDER BY product_name, product_id, order_id;
