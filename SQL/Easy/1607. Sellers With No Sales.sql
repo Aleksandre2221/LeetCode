@@ -8,7 +8,8 @@ WHERE NOT EXISTS (
   FROM orders o 
   WHERE o.seller_id = s.seller_id 
     AND EXTRACT(YEAR FROM o.sale_date) = 2020
-);
+)
+ORDER BY seller_name;
 
 
 
@@ -19,7 +20,8 @@ WHERE s.seller_id NOT IN (
   SELECT seller_id  
   FROM orders 
   WHERE EXTRACT(YEAR FROM sale_date) = 2020
-);
+)
+ORDER BY seller_name;
 
 
 
@@ -28,5 +30,6 @@ SELECT s.seller_name
 FROM seller s
 LEFT JOIN orders o ON s.seller_id = o.seller_id 
   AND EXTRACT(YEAR FROM o.sale_date) = 2020
-WHERE o.seller_id IS NULL;
+WHERE o.seller_id IS NULL
+ORDER BY seller_name;
 
