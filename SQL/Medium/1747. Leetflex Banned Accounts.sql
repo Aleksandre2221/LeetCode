@@ -1,24 +1,16 @@
 
 
          -- Approach 1. Using only - JOIN with multiple conditions -- 
-SELECT l1.account_id 
+SELECT DISTINCT l1.account_id 
 FROM loginfo l1 
-JOIN loginfo l2 ON l1.account_id = l2.account_id 
+JOIN loginfo l2 
+	ON l1.account_id = l2.account_id 
 	AND l1.ip_address <> l2.ip_address 
-  AND l2.login BETWEEN l1.login AND l1.logout;
+ 	AND l2.login BETWEEN l1.login AND l1.logout;
 
 
 
-         -- Approach 2. Using - JOIN with multiple - WHERE conditons -- 
-SELECT l1.account_id 
-FROM loginfo l1 
-JOIN loginfo l2 ON l1.account_id = l2.account_id 
-WHERE l1.ip_address <> l2.ip_address 
-	AND l2.login BETWEEN l1.login AND l1.logout;
-
-
-
-         -- Approach 3. Using - WHERE EXISTS condition -- 
+         -- Approach 2. Using - WHERE EXISTS condition -- 
 SELECT DISTINCT l1.account_id
 FROM loginfo l1
 WHERE EXISTS (
