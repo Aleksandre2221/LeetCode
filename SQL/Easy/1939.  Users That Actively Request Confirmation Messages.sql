@@ -1,10 +1,12 @@
 
 
-         -- Approach 1. Using - Self=Join and - WHERE condition -- 
+         -- Approach 1. Using - Self=Join --
 SELECT DISTINCT c1.user_id
 FROM confirmations c1
-JOIN confirmations c2 ON c1.user_id = c2.user_id AND c1.time_stamp < c2.time_stamp
-WHERE c2.time_stamp - c1.time_stamp <= INTERVAL '1 Day';
+JOIN confirmations c2 
+    ON c1.user_id = c2.user_id 
+    AND c1.time_stamp < c2.time_stamp
+    AND c2.time_stamp - c1.time_stamp <= INTERVAL '1 Day';
 
 
 
