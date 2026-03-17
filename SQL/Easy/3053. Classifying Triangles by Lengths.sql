@@ -1,11 +1,11 @@
 
 
          -- Approach 1. Using - CASE...WHEN conditions -- 
-SELECT 
-    CASE 
-        WHEN ((a + b) <= c) OR ((a + c) <= b) OR ((c + b) <= a) THEN 'Not A Triangle'
-        WHEN a = b  AND b = c AND a = c THEN 'Equilateral'
-        WHEN (a <> b AND b <> c AND a <> c) THEN 'Scalene'
-        WHEN (a = b AND a <> c) OR (b = c AND b <> a) OR (a = c AND a <> b) THEN 'Isosceles'
+SELECT
+    CASE
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN 'Not A Triangle'
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN A = B OR A = C OR B = C THEN 'Isosceles'
+        ELSE 'Scalene'
     END triangle_type
 FROM triangles;
