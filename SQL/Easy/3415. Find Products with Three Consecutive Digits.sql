@@ -1,14 +1,6 @@
 
 
          -- Approach 1. Using - REGEX (For PostgreSQL) -- 
-SELECT *
+SELECT product_id, name
 FROM Products
-WHERE name ~ '[0-9]{3}';
-
-
-
-
-         -- Approach 2. Using - REGEXP (For MySQL) -- 
-SELECT *
-FROM Products
-WHERE name REGEXP '[0-9]{3}';
+WHERE REGEXP_LIKE('X'||name||'X', '([^0-9])([0-9]{3})([^0-9])');
