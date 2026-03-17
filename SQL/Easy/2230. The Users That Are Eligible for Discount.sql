@@ -1,8 +1,8 @@
 
 
-         -- The Best Approach. Using multiple - WHERE conditionss -- 
-SELECT DISTINCT user_id
-FROM Purchases
-WHERE time_stamp >= startDate AND time_stamp < endDate + INTERVAL '1 day'
-  AND amount >= minAmount
-ORDER BY user_id;
+         -- Approach 1. Using - WHERE conditions -- 
+SELECT DISTINCT p.user_id
+FROM purchases p
+WHERE 
+    time_stamp BETWEEN startDate AND endDate
+    AND amount >= minAmount
