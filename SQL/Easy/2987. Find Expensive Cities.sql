@@ -1,21 +1,13 @@
 
 
-         -- Approach 1. Using - Subquery with Window Function - AVG -- 
-SELECT city 
-FROM (
-  SELECT DISTINCT city,
-      AVG(price) OVER(PARTITION BY city) city_avg, 
-      AVG(price) OVER() national_avg
-  FROM listings
+         -- Approach 1. Using - CTE -- 
+WITH averages AS (
+    SELECT city, 
+        AVG(price) OVER() national_avg,
+        AVG(price) OVER(PARTITION BY city) city_avg
+    FROM listings
 )
-WHERE city_avg > national_avg
-ORDER BY city;
-
-
-
-         -- Approach 2. Using - GROUP BY with - HAVING condition -- 
-SELECT city
-FROM listings
-GROUP BY city
-HAVING AVG(price) > (SELECT AVG(price) FROM listings)
+SELECT DISTINCT city
+FROM averages 
+WHERE national_avg < city_avg
 ORDER BY city;
