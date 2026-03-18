@@ -22,8 +22,8 @@ SELECT t.team_name,
       		ELSE 0 
       	END
     ) points, 
-    SUM(am.goals_for) goals_for, 
-    SUM(am.goals_against) goals_against, 
+    SUM(am.goals_for) goal_for, 
+    SUM(am.goals_against) goal_against, 
     SUM(am.goals_for) - SUM(am.goals_against) goal_diff
 FROM all_matches am
 JOIN teams t USING (team_id)
