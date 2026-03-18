@@ -1,37 +1,26 @@
 
 
-         -- Approach 1. Using - Subquery with - CROSS JOIN -- 
-SELECT pe.platform, pe.experiment_name, COUNT(e.platform) num_experiments 
-FROM (
-	SELECT * 
-    FROM (SELECT DISTINCT platform FROM experiments)
-    CROSS JOIN (SELECT DISTINCT experiment_name FROM experiments)
-) pe
-LEFT JOIN experiments e ON e.platform = pe.platform AND e.experiment_name = pe.experiment_name
-GROUP BY pe.platform, pe.experiment_name;
-
-
-
-         -- Approach 2. The same solution but more readable -- 
+         -- Approach 1. Using two - CTE and - CROSS JOIN -- 
 WITH 
-	  all_platforms AS (
-      SELECT DISTINCT platform 
-      FROM experiments
+    platforms AS (
+        SELECT 'Android' platform
+        UNION ALL
+        SELECT 'IOS' 
+        UNION ALL
+        SELECT 'Web' 
     ),
-    all_experiments AS (
-      SELECT DISTINCT experiment_name
-      FROM experiments
-    ),
-    platform_experiment AS (
-      SELECT * 
-      FROM all_platforms, all_experiments
-    ),
-    cnt AS (
-      SELECT platform, experiment_name, COUNT(*) cnt
-      from experiments 
-      GROUP BY platform, experiment_name
+    activities AS (
+        SELECT 'Reading' experiment_name
+        UNION ALL
+        SELECT 'Sports' 
+        UNION ALL
+        SELECT 'Programming' 
 )
-SELECT pe.platform, pe.experiment_name, COALESCE(cnt.cnt, 0) num_experiments
-FROM platform_experiment pe
-LEFT JOIN cnt ON cnt.platform = pe.platform 
-	AND cnt.experiment_name = pe.experiment_name
+SELECT
+    p.platform,
+    a.experiment_name experiment_name,
+    COUNT(ep.experiment_id) num_experiments
+FROM platforms p
+CROSS JOIN activities a
+LEFT JOIN experiments ep USING (platform, experiment_name)
+GROUP BY p.platform, a.experiment_name;
