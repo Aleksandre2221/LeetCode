@@ -1,10 +1,9 @@
 
 
-         -- The Best Approach. Using - SUM within - ORDER BY and - LIMIT -- 
+         -- Approach 1. Using - HAVING -- 
 SELECT c.candidate_id 
-FROM candidates c  
-JOIN rounds r ON r.interview_id = c.interview_id
-WHERE c.years_of_exp >= 2 
+FROM candidates c 
+JOIN rounds r USING (interview_id)
 GROUP BY c.candidate_id
-ORDER BY SUM(score) DESC 
-LIMIT 1; 
+HAVING MAX(c.years_of_exp) >= 2
+    AND SUM(r.score) > 15;
