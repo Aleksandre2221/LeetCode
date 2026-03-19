@@ -1,13 +1,16 @@
 
 
          -- Approach 1. Using - CTE -- 
-WITH cnt AS (
-  SELECT dep_id, COUNT(*) cnt
-  FROM employees 
-  GROUP BY dep_id
+WITH ranking AS (
+    SELECT dep_id, 
+        RANK() OVER(ORDER BY COUNT(*) DESC) rnk
+    FROM employees 
+    GROUP BY dep_id
 )
-SELECT cnt.dep_id, e.emp_name 
-FROM cnt 
-JOIN employees e ON e.dep_id = cnt.dep_id
-WHERE cnt.cnt = (SELECT MAX(cnt) FROM cnt)
-	AND e.position = 'Manager';
+SELECT 
+    e.emp_name manager_name, 
+    dep_id
+FROM ranking r 
+JOIN employees e USING (dep_id)
+WHERE r.rnk = 1 AND e.position = 'Manager'
+ORDER BY dep_id;
