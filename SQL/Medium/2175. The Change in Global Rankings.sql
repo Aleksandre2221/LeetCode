@@ -11,3 +11,13 @@ WITH ranking AS (
 SELECT team_id, name, 
   rn2 - rn1 rank_diff   
 FROM ranking; 
+
+
+         -- Approach 2. in one query -- 
+SELECT 
+    tp.team_id,
+    tp.name, 
+    (ROW_NUMBER() OVER(ORDER BY points DESC, tp.name) 
+     - ROW_NUMBER() OVER(ORDER BY (tp.points + pc.points_change) DESC, tp.name)) rank_diff
+FROM teampoints tp 
+JOIN pointschange pc USING (team_id);
