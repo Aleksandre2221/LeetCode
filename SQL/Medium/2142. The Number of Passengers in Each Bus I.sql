@@ -10,7 +10,7 @@ WITH assigned_bus AS (
     FROM passengers p
     JOIN buses b ON p.arrival_time <= b.arrival_time
 )
-SELECT b.bus_id, COUNT(ab.passenger_id) AS passenger_count
+SELECT b.bus_id, COUNT(ab.passenger_id) AS passengers_cnt 
 FROM buses b
 LEFT JOIN assigned_bus ab ON b.bus_id = ab.bus_id AND ab.rn = 1
 GROUP BY b.bus_id
@@ -27,7 +27,7 @@ WITH assigned_bus AS (
     GROUP BY p.passenger_id
 )
 SELECT b.bus_id,
-    COUNT(ab.passenger_id) passenger_count
+    COUNT(ab.passenger_id) passengers_cnt 
 FROM buses b
 LEFT JOIN assigned_bus ab ON b.bus_id = ab.bus_id
 GROUP BY b.bus_id
@@ -41,7 +41,7 @@ WITH assigned_bus AS (
   FROM buses b 
   JOIN passengers p ON P.arrival_time <= b.arrival_time
 )
-SELECT b.bus_id, COUNT(ab.passenger_id)  
+SELECT b.bus_id, COUNT(ab.passenger_id) passengers_cnt  
 FROM buses b 
 LEFT JOIN assigned_bus ab ON b.bus_id = ab.bus_id
 GROUP BY b.bus_id
