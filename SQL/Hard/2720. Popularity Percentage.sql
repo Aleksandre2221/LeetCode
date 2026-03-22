@@ -4,7 +4,7 @@
          -- Approach 1. Using - CTE -- 
 WITH bidir AS (
   SELECT user1, user2 FROM friends 
-  UNION ALL  
+  UNION 
   SELECT user2, user1 FROM friends
 )
 SELECT user1, 
