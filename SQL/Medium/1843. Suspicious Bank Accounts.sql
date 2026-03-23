@@ -1,16 +1,20 @@
 
 
-         -- Approach 1. Using - CTE with a Window Function - LEAD() -- 
-WITH flagged AS (
-    SELECT account_id,
-        TO_CHAR(day, 'YYYY-MM') "month",
-        SUM(amount) total_amount,
-        LEAD(SUM(amount)) OVER(PARTITION BY account_id ORDER BY TO_CHAR(day, 'YYYY-MM')) next_month
-    FROM transactions 
-    GROUP BY account_id, TO_CHAR(day, 'YYYY-MM')
+         -- Approach 1. Using - CTE -- 
+WITH calc AS (
+    SELECT 
+        a.account_id,
+        DATE_TRUNC('month', t.day) tr_month, 
+        SUM(t.amount) month_total, 
+        a.max_income
+    FROM transactions t  
+    JOIN accounts a USING (account_id)
+    WHERE t.type = 'Creditor'
+    GROUP BY a.account_id, DATE_TRUNC('month', t.day), a.max_income
+    HAVING SUM(t.amount) > a.max_income
 )
-SELECT DISTINCT f.account_id
-FROM flagged f
-JOIN accounts a ON a.account_id = f.account_id
-WHERE f.total_amount > a.max_income
-  AND f.next_month > a.max_income;
+SELECT DISTINCT c1.account_id 
+FROM calc c1 
+JOIN calc c2 
+    ON c1.account_id = c2.account_id
+    AND c2.tr_month = c1.tr_month + INTERVAL '1 MONTH';
