@@ -6,7 +6,8 @@ WITH ranking as (
   FROM calls 
 )
 SELECT c.first_name, r.type,  
-	TO_CHAR(INTERVAL '1 second' * duration, 'HH24:MI:SS')
+	TO_CHAR(INTERVAL '1 second' * duration, 'HH24:MI:SS') duration_formatted
 FROM ranking r 
 JOIN contacts c ON r.contact_id = c.id
 WHERE rnk <= 3
+ORDER BY type DESC, duration_formatted DESC, first_name;
