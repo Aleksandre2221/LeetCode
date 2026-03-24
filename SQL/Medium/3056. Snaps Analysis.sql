@@ -1,9 +1,20 @@
 
 
          -- Approach 1. Using - SUM with - CASE...WHEN conditions -- 
-SELECT age.age_bucket, 
-	ROUND(SUM(CASE WHEN act.activity_type = 'send' THEN act.time_spent END) * 100.0 / SUM(act.time_spent), 2) send_perc,
-	ROUND(SUM(CASE WHEN act.activity_type = 'open' THEN act.time_spent END) * 100.0 / SUM(act.time_spent), 2) open_perc
-FROM activities act  
-JOIN age ON age.user_id = act.user_id
-GROUP BY age.age_bucket;
+SELECT 
+	a.age_bucket,
+    COALESCE( 
+        ROUND( 
+            SUM(CASE WHEN ac.activity_type = 'send' THEN time_spent END) * 100.0 
+            / NULLIF(SUM(ac.time_spent), 0)
+        ,2)
+    ,0) send_perc, 
+    COALESCE(
+        ROUND( 
+            SUM(CASE WHEN ac.activity_type = 'open' THEN time_spent END) * 100.0 
+            / NULLIF(SUM(ac.time_spent), 0)
+        ,2)
+    ,0) open_perc
+FROM age a  
+LEFT JOIN activities ac ON a.user_id = ac.user_id 
+GROUP BY a.age_bucket;
