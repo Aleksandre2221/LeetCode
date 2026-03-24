@@ -10,20 +10,19 @@ WITH percentile AS (
 SELECT f.*
 FROM fraud f  
 JOIN percentile p ON p.state = f.state 
-WHERE p.p95 <= f.fraud_score
-ORDER BY state, fraud_score DESC, policy_id
+WHERE p.p95 = f.fraud_score
+ORDER BY state, fraud_score DESC, policy_id;
 
 
 
 
-         -- Approach 2. Without using built-in functions -- 
-WITH ranked AS (
-    SELECT *,
-        RANK() OVER (PARTITION BY state ORDER BY fraud_score DESC) rn,
-        COUNT(*) OVER (PARTITION BY state) total
-    FROM Fraud
+         -- Approach 2. Using - CTE -- 
+WITH ranking AS (
+    SELECT *, 
+        RANK() OVER(PARTITION BY state ORDER BY fraud_score DESC) rnk  
+    FROM fraud
 )
-SELECT policy_id, state, fraud_score
-FROM ranked
-WHERE rn <= CEIL(0.05 * total)
+SELECT policy_id, state, fraud_score  
+FROM ranking 
+WHERE rnk = 1
 ORDER BY state, fraud_score DESC, policy_id;
