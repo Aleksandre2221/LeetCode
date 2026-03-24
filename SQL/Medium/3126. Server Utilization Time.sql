@@ -1,20 +1,16 @@
 
 
-         -- Approach 1. Using two - CTE -- 
-WITH 
-	prev_values AS (
-    	SELECT *, 
-        	LAG(status_time) OVER(PARTITION BY server_id ORDER BY status_time) prev_time,
-        	LAG(session_status) OVER(PARTITION BY server_id ORDER BY status_time) prev_status
-    	FROM servers
-	),
-	diff AS (
-    	SELECT server_id,
-        	CASE 
-            	WHEN session_status = 'stop' AND prev_status = 'start'
-            	THEN status_time - prev_time
-        	END interval_diff
-   		 FROM prev_values
+         -- Approach 1. Using - CTE -- 
+WITH row_num AS (
+    SELECT *,
+        ROW_NUMBER() OVER(PARTITION BY server_id, session_status ORDER BY status_time) rn
+    FROM servers
 )
-SELECT ROUND(SUM(EXTRACT(EPOCH FROM interval_diff)) / 86400.0, 0) total_uptime_days
-FROM diff;
+SELECT 
+	FLOOR(SUM(EXTRACT(EPOCH FROM (rn1.status_time - rn2.status_time))) / 86400) total_uptime_days
+FROM row_num rn1
+JOIN row_num rn2 
+    ON rn1.server_id = rn2.server_id
+    AND rn1.rn = rn2.rn
+    AND rn1.session_status = 'stop'
+    AND rn2.session_status = 'start';
