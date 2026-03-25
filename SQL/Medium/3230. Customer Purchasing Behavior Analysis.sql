@@ -37,19 +37,19 @@ ORDER BY loyalty_score DESC, customer_id;
           -- Approach 2. Using one - CTE -- 
 WITH category_info AS (
   SELECT t.customer_id, p.category, 
-           DENSE_RANK() OVER(
+           RANK() OVER(
                            PARTITION BY t.customer_id 
-                           ORDER BY COUNT(*) DESC, MAX(t.transaction_date) DESC) rnk
+                        ORDER BY COUNT(*) DESC, MAX(t.transaction_date) DESC) rnk
   FROM transactions t  
   JOIN products p ON t.product_id = p.product_id
   GROUP BY t.customer_id, p.category
 )
 SELECT t.customer_id, 
     SUM(t.amount) total_amount, 
-    COUNT(t.transaction_id) transaction_cnt, 
-    COUNT(DISTINCT p.category) category_cnt,
-    MAX(ci.category) most_frequent_category,
-    ROUND(AVG(t.amount), 2) avg_amount, 
+    COUNT(t.transaction_id) transaction_count, 
+    COUNT(DISTINCT p.category) unique_categories,
+    ROUND(AVG(t.amount), 2) avg_transaction_amount,
+    MAX(ci.category) top_category, 
     ROUND((COUNT(t.transaction_id) * 10.0) + (sum(t.amount) / 100.0), 2) loyalty_score
 FROM transactions t 
 JOIN products p USING (product_id)
