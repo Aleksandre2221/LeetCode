@@ -6,10 +6,11 @@ WITH
 	streaks AS (
     SELECT *, 
         CASE  
-        		WHEN amount > LAG(amount) OVER(PARTITION BY customer_id ORDER BY transaction_date) 
-        			AND transaction_date - LAG(transaction_date) OVER(PARTITION BY customer_id ORDER BY transaction_date) = 1
-        		THEN 0 
-        		ELSE 1 
+			WHEN 
+      			amount > LAG(amount) OVER(PARTITION BY customer_id ORDER BY transaction_date) 
+        		  AND transaction_date - LAG(transaction_date) OVER(PARTITION BY customer_id ORDER BY transaction_date) = 1
+        	THEN 0 
+			ELSE 1 
       	END streak_id
     FROM transactions
 	), 
@@ -19,8 +20,9 @@ WITH
     FROM streaks
 ) 
 SELECT customer_id, 
-	MAX(transaction_date) consecutive_start, 
-	MIN(transaction_date) consecutive_end
+	MIN(transaction_date) consecutive_start, 
+	MAX(transaction_date) consecutive_end
 FROM grps  
 GROUP BY customer_id, grp_id
-HAVING COUNT(grp_id) >= 3;
+HAVING COUNT(grp_id) >= 3
+ORDER by customer_id, consecutive_start, consecutive_end;
