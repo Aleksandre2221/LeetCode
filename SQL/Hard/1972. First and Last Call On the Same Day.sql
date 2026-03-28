@@ -13,7 +13,7 @@ WITH
       	 FIRST_VALUE(recipient_id) OVER(PARTITION BY call_time::date, caller_id ORDER BY call_time) f,
       	 FIRST_VALUE(recipient_id) OVER(PARTITION BY call_time::date, caller_id ORDER BY call_time DESC) l 
 	  FROM bidir
-)SELECT * FROM first_last
+)
 SELECT DISTINCT user_id 
 FROM first_last  
 WHERE f = l;
