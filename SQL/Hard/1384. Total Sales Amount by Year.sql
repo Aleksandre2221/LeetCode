@@ -9,12 +9,13 @@ WITH RECURSIVE entire_period AS (
   WHERE min_period_date + INTERVAL '1 day' <= max_period_date
 )
 SELECT s.product_id, p.product_name, 
-	  EXTRACT(YEAR FROM ep.min_period_date) report_year, 
+	  TO_CHAR(ep.min_period_date, 'YYYY') report_year, 
 	  SUM(s.average_daily_sales) total_amount  
 FROM entire_period ep  
 JOIN sales s ON ep.min_period_date >= s.period_start AND ep.min_period_date <= s.period_end
 JOIN product p ON p.product_id = s.product_id
-GROUP BY s.product_id, p.product_name, EXTRACT(YEAR FROM ep.min_period_date)
+GROUP BY s.product_id, p.product_name, TO_CHAR(ep.min_period_date, 'YYYY')
+ORDER BY product_id, report_year;
 
 
 
