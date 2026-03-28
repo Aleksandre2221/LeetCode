@@ -2,24 +2,20 @@
 
 
          -- Approach 1. Using - CONCAT function -- 
-WITH prep AS (
-  SELECT power, 
+WITH left_side AS (
+  SELECT power,
       CONCAT(
-          CASE 
-              WHEN factor > 0 
-              THEN '+'
-              ELSE '-' 
-          END, 
-          ABS(factor),
-          CASE 
-            	WHEN "power" = 1 THEN 'X' 
-            	WHEN "power" > 1 THEN CONCAT('X', '^', power)
-            	ELSE ''
-          END) terms
+        CASE 
+          WHEN factor > 0 THEN '+'
+        END, 
+        factor::text,
+        CASE 
+          WHEN power = 1 THEN 'X'
+          WHEN power = 0 THEN ''
+          ELSE CONCAT('X^', power)
+        END
+      )ls
   FROM terms
 )
-SELECT 
-    CONCAT(
-          STRING_AGG(terms, '' ORDER BY power DESC)
-      , ' = 0') equation
-FROM prep; 
+SELECT CONCAT(STRING_AGG(ls, '' ORDER BY POWER DESC), '=0') equation 
+FROM left_side
