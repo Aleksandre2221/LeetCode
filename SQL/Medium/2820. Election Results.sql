@@ -1,5 +1,7 @@
 
 
+-- Risolved: 2 times
+
 
          -- Approach 1. Using two - CTE -- 
 WITH 
