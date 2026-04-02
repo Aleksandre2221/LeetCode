@@ -8,7 +8,6 @@ WITH day_sum AS (
   SELECT visited_on, SUM(amount) amount 
   FROM customer
   GROUP BY visited_on
-  ORDER BY visited_on
 )
 SELECT visited_on, 
 	SUM(amount) OVER(ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) amount, 
