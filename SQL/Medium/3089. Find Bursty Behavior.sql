@@ -1,31 +1,21 @@
 
 
-         -- Approach 1. Using two - CTE -- 
-WITH 
-	seven_day AS (
-        SELECT p1.user_id,
-            COUNT(*) cnt
-        FROM Posts p1
-        JOIN Posts p2 
-            ON p1.user_id = p2.user_id
-            AND p2.post_date >= p1.post_date 
-            AND p2.post_date <= p1.post_date + INTERVAL '6 days'
-        WHERE p1.post_date BETWEEN '2024-02-01' AND '2024-02-28'
-        GROUP BY p1.user_id, p1.post_id          
-    ),
-	avg_weekly AS (
-        SELECT user_id,
-            COUNT(*)::numeric / 4 avg_weekly_posts
-        FROM Posts
-        WHERE post_date BETWEEN '2024-02-01' AND '2024-02-28'
-        GROUP BY user_id
+         -- Approach 1. Using - CTE -- 
+WITH weekly_cnt AS (
+  SELECT user_id, post_date, 
+  	 COUNT(*) OVER(
+    		 	PARTITION BY user_id
+    			ORDER BY post_date
+    		 	RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW) cnt
+  FROM posts 
+  WHERE DATE_TRUNC('month', post_date) = '2024-02-01'
 )
 SELECT 
-    s.user_id,
-    MAX(s.cnt) max_7day_posts,
-    a.avg_weekly_posts
-FROM seven_day s
-JOIN avg_weekly a ON s.user_id = a.user_id
-GROUP BY s.user_id, a.avg_weekly_posts
-HAVING MAX(s.cnt) >= a.avg_weekly_posts * 2
-ORDER BY s.user_id;
+	user_id,
+    MAX(cnt) max_7day_posts, 
+    (COUNT(*) * 1.0 / 4) avg_weekly_posts  
+FROM weekly_cnt  
+GROUP BY user_id
+HAVING 
+	(COUNT(*) * 1.0 / 4) * 2 <= MAX(cnt)
+
