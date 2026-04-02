@@ -1,5 +1,8 @@
 
 
+-- Risolved: 2 times
+
+
          -- Approach 1. Using - HAVING with multiple conditions and - STRING_AGG -- 
 SELECT state, 
   STRING_AGG(city, ', ' ORDER BY city) cities,
