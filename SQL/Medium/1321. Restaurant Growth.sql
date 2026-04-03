@@ -10,8 +10,15 @@ WITH day_sum AS (
   GROUP BY visited_on
 )
 SELECT visited_on, 
-	SUM(amount) OVER(ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) amount, 
-	ROUND(AVG(amount) OVER(ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) average_amount 
+	SUM(amount) OVER(  
+                    ORDER BY visited_on 
+                    RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW) amount, 
+	ROUND(
+            AVG(amount) OVER(                    
+                        ORDER BY visited_on 
+                        RANGE BETWEEN INTERVAL '6 days' PRECEDING AND CURRENT ROW)
+        , 2) average_amount
+
 FROM day_sum 
 OFFSET 6;
 
