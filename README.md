@@ -19,7 +19,7 @@ LeetCode/
 └── SQL/
     ├── Easy/ (113 of 113)
     ├── Medium/ (142 of 142)
-    └── Hard/ (3 of 65)
+    └── Hard/ (57 of 65)
 ```
 - **Easy / Medium / Hard** – Problems organized by difficulty.  
 - **Multiple approaches** – Most problems have more than one solution with different approaches.  
