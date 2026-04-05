@@ -1,11 +1,20 @@
 
 
-		-- Appraoch 1. Using - WHERE IN - condition -- 
-SELECT ROUND(COUNT(player_id)::numeric / (SELECT COUNT(DISTINCT player_id) FROM activity), 2) fraction
-FROM activity 
-WHERE (player_id, event_date - INTERVAL '1 DAY') IN (
-  SELECT player_id, MIN(event_date) first_date FROM activity GROUP BY player_id
-  )
+		-- Appraoch 1. Using - CTE --  
+WITH ordering AS (
+    SELECT *, 
+        ROW_NUMBER() OVER(PARTITION BY player_id ORDER BY event_date) rn, 
+        LAG(event_date) OVER(PARTITION BY player_id ORDER BY event_date) prev_date 
+    FROM activity
+)
+SELECT 
+    ROUND(
+            SUM(CASE WHEN rn = 2 AND event_date - prev_date = 1 THEN 1.0 ELSE 0 END)
+            / COUNT(DISTINCT player_id) 
+        , 2
+    ) fraction
+FROM ordering
+
 
 
 	 -- Approach 2. Using Subquery and - LEFT JOIN --
@@ -21,9 +30,10 @@ LEFT JOIN activity t2 ON t1.player_id = t2.player_id AND t2.event_date = t1.firs
 
         -- Approach 3. Using - CTE - with Window Functions - ROW_NUMBER / LEAD
 WITH t1 AS (
-  SELECT *, ROW_NUMBER() OVER(PARTITION BY player_id ORDER BY event_date) AS rn,
-	LEAD(event_date) OVER(PARTITION BY player_id) - event_date AS date_diff
-	FROM activity
+  SELECT *, 
+		ROW_NUMBER() OVER(PARTITION BY player_id ORDER BY event_date) AS rn,
+		LEAD(event_date) OVER(PARTITION BY player_id) - event_date AS date_diff
+  FROM activity
 )
 SELECT 
 	ROUND(
