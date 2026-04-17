@@ -9,7 +9,7 @@ WHERE id NOT IN (SELECT customerid FROM orders)
 
 
     -- Approach 2. Using - WHERE NOT EXISTS - condition -- 
-  SELECT c.name Customers
+SELECT c.name Customers
 FROM customers c
 WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.customerid = c.id)
 
